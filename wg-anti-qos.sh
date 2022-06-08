@@ -41,11 +41,11 @@ cat > /etc/wireguard/client.conf <<-EOF
 [Interface]
 PrivateKey = $c1
 Address = 10.0.0.2/24 
-PreUp = start D:\software\TunSafe\bat\start.bat
+PreUp = start C:\udp\start.bat
 PreUp = ping -n 4 127.1 >nul
-PostUp = start D:\software\TunSafe\bat\routes-up.bat
-PostDown = start D:\software\TunSafe\bat\routes-down.bat
-PostDown = start D:\software\TunSafe\bat\stop.bat
+PostUp = start C:\udp\routes-up.bat
+PostDown = start C:\udp\routes-down.bat
+PostDown = start C:\udp\stop.bat
 DNS = 8.8.8.8
 MTU = 1250
 [Peer]
@@ -85,7 +85,7 @@ wireguard_install(){
     cd /etc/udp
 curl -o udp2raw https://raw.githubusercontent.com/lmc999/OpenvpnForGames/master/udp2raw
 chmod +x /etc/udp/udp2raw
-nohup ./udp2raw -s -l0.0.0.0:9898 -r 127.0.0.1:1195 --raw-mode faketcp -a -k passwd >udp2raw.log 2>&1 &
+nohup ./udp2raw -s -l0.0.0.0:9898 -r 127.0.0.1:1195 --raw-mode faketcp --cipher-mode none -a -k passwd >udp2raw.log 2>&1 &
 
 #下载批处理文件
 #curl -o /etc/wireguard/start.bat https://raw.githubusercontent.com/lmc999/Wireguard-anti-QOS/master/start.bat
@@ -100,7 +100,7 @@ cat > /etc/rc.d/init.d/udp<<-EOF
 #chkconfig: 2345 80 90
 #description:udp
 cd /etc/udp
-nohup ./udp2raw -s -l0.0.0.0:9898 -r 127.0.0.1:1195 --raw-mode faketcp -a -k passwd >udp2raw.log 2>&1 &
+nohup ./udp2raw -s -l0.0.0.0:9898 -r 127.0.0.1:1195 --raw-mode faketcp --cipher-mode none -a -k passwd >udp2raw.log 2>&1 &
 EOF
 
 chmod +x /etc/rc.d/init.d/udp
